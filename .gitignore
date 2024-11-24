@@ -2,6 +2,19 @@ __pycache__/
 __pycache__
 *__pycache__*
 .vscode/
+notebooks/Code_Export
+notebooks/Otus-Practice-Cloud-Infra-Main
 
 *.png
 *.pkl
+
+*.tfstate
+*.tfstate.backup
+*.tfstate.backup.*
+*.tfplan
+.terraform
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+authorized_key.json
+terraform.tfvars
+iam_token.txt
