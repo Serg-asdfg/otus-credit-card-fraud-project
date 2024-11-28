@@ -4,11 +4,6 @@ resource "yandex_iam_service_account" "sa" {
   description = "Service account for Dataproc cluster and related services"
 }
 
-# если не требуется создания, а нужно просто декларирование имеющегося
-# data "yandex_iam_service_account" "sa" {
-#   name = var.yc_service_account_name
-# }
-
 resource "yandex_resourcemanager_folder_iam_member" "sa_roles" {
   for_each = toset([
     "storage.admin",
@@ -22,6 +17,7 @@ resource "yandex_resourcemanager_folder_iam_member" "sa_roles" {
     "storage.viewer",
     "storage.editor"
   ])
+
   folder_id = var.yc_folder_id
   role      = each.key
   member    = "serviceAccount:${yandex_iam_service_account.sa.id}"
@@ -189,7 +185,7 @@ resource "yandex_dataproc_cluster" "dataproc_cluster" {
 
 # Compute ресурсы
 resource "yandex_compute_disk" "boot_disk" {
-  name     = "boot-disk-dataproc"
+  name     = "boot-disk"
   zone     = var.yc_zone
   image_id = var.yc_image_id
   size     = 30

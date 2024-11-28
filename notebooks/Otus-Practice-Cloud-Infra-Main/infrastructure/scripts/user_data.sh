@@ -15,10 +15,8 @@ export HOME="/home/ubuntu"
 curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
 
 # Изменяем владельца директории yandex-cloud и её содержимого
-log "Changing ownership of yandex-cloud and .config directory"
+log "Changing ownership of yandex-cloud directory"
 sudo chown -R ubuntu:ubuntu $HOME/yandex-cloud
-sudo chown -R ubuntu:ubuntu $HOME/.config
-sudo chown -R ubuntu:ubuntu $HOME/.config/yandex-cloud/config.yaml
 
 # Применяем изменения из .bashrc
 log "Applying changes from .bashrc"
@@ -85,9 +83,9 @@ ssh-add /home/ubuntu/.ssh/dataproc_key
 echo "ssh-add /home/ubuntu/.ssh/dataproc_key" >> /home/ubuntu/.bashrc
 
 # Устанавливаем дополнительные полезные инструменты
-# log "Installing additional tools"
-# apt-get update
-# apt-get install -y tmux htop iotop
+log "Installing additional tools"
+apt-get update
+apt-get install -y tmux htop iotop
 
 # Устанавливаем s3cmd
 log "Installing s3cmd"
@@ -110,21 +108,22 @@ chmod 600 /home/ubuntu/.s3cfg
 # Определяем целевой бакет
 TARGET_BUCKET=${s3_bucket}
 
-# Копируем все файлы из исходного бакета в наш новый бакет
-log "Copying files from source bucket to destination bucket"
-s3cmd sync \
+# Копируем конкретный файл из исходного бакета в наш новый бакет
+log "Copying file from source bucket to destination bucket"
+FILE_NAME="2022-11-04.txt"
+s3cmd cp \
     --config=/home/ubuntu/.s3cfg \
     --acl-public \
-    s3://otus-mlops-source-data/ \
-    s3://$TARGET_BUCKET/
+    s3://otus-mlops-source-data/$FILE_NAME \
+    s3://$TARGET_BUCKET/$FILE_NAME
 
 # Проверяем успешность копирования
 if [ $? -eq 0 ]; then
-    log "Files successfully copied to $TARGET_BUCKET"
+    log "File $FILE_NAME successfully copied to $TARGET_BUCKET"
     log "Listing contents of $TARGET_BUCKET"
     s3cmd ls --config=/home/ubuntu/.s3cfg s3://$TARGET_BUCKET/
 else
-    log "Error occurred while copying files to $TARGET_BUCKET"
+    log "Error occurred while copying file $FILE_NAME to $TARGET_BUCKET"
 fi
 
 # Создаем директорию для скриптов на прокси-машине
