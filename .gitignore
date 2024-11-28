@@ -3,5 +3,17 @@ __pycache__
 *__pycache__*
 .vscode/
 
-*.png
 *.pkl
+*.jpg
+
+*.tfstate
+*.tfstate.backup
+*.tfstate.backup.*
+*.tfplan
+.terraform
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+authorized_key.json
+terraform.tfvars
+iam_token.txt
+OAuth_token.txt
